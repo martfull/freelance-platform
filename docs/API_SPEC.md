@@ -235,6 +235,8 @@ Moderator вирішує dispute.
 
 ## Error Model
 
+Detailed error handling rules are documented in [ERROR_HANDLING.md](ERROR_HANDLING.md).
+
 ```json
 {
   "error": {
