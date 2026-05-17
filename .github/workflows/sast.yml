@@ -1,0 +1,42 @@
+name: SAST — Bandit Security Scan
+
+on:
+  push:
+    branches: [develop, main]
+  pull_request:
+    branches: [develop]
+  schedule:
+    - cron: '0 3 * * 1'   # щопонеділка о 03:00
+
+jobs:
+  bandit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Bandit
+        run: pip install bandit
+
+      - name: Run Bandit — JSON
+        run: bandit -r backend/ -f json -o security/reports/bandit-report.json || true
+
+      - name: Run Bandit — HTML
+        run: bandit -r backend/ -f html -o security/reports/bandit-report.html || true
+
+      - name: Run Bandit — fail on HIGH severity
+        run: bandit -r backend/ -ll -ii
+        # -ll  → мінімальний severity рівень: HIGH
+        # -ii  → мінімальний confidence: HIGH
+        # повертає exit code != 0 тільки якщо є HIGH+HIGH знахідки
+
+      - name: Upload SAST Artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: bandit-reports
+          path: security/reports/
