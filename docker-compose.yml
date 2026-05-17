@@ -25,6 +25,8 @@ services:
       DATABASE_URL: postgresql://${POSTGRES_USER:-freelance}:${POSTGRES_PASSWORD:-freelance}@db:5432/${POSTGRES_DB:-freelance}
       SECRET_KEY: ${SECRET_KEY:-change-me-in-production}
       ACCESS_TOKEN_EXPIRE_MINUTES: ${ACCESS_TOKEN_EXPIRE_MINUTES:-30}
+      REFRESH_TOKEN_EXPIRE_DAYS: ${REFRESH_TOKEN_EXPIRE_DAYS:-7}
+      STORAGE_PATH: ${STORAGE_PATH:-storage/chunks}
     volumes:
       - ./backend:/app
       - ./storage:/app/storage
