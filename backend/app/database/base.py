@@ -4,6 +4,7 @@
 class Base(DeclarativeBase):
     pass
 
+
 try:
     from app.modules.accounts import models as accounts_models  # noqa: F401
     from app.modules.audit import models as audit_models  # noqa: F401
