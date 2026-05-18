@@ -85,10 +85,19 @@ jobs:
             security/reports/bandit-report.html
             security/reports/bandit-report.json
 
-  deploy-staging:
+  deploy:
     runs-on: ubuntu-latest
     needs: sast
-    if: github.ref == 'refs/heads/develop'
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     steps:
-      - name: Deploy to staging
-        run: echo "Deploying to staging — add real deploy step here"
+      - name: Deploy to server
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            cd ~/freelance-platform
+            git pull origin main
+            docker compose up --build -d
+            docker compose exec -T api alembic upgrade head
