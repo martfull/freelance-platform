@@ -93,8 +93,8 @@ jobs:
       - name: Deploy to server
         uses: appleboy/ssh-action@v1.0.3
         with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
+          host: 83.10.125.96
+          username: idzyn
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             cd ~/freelance-platform
