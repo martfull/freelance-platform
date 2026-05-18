@@ -44,7 +44,7 @@ jobs:
 
       - name: Upload pip-audit report
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: pip-audit-report
           path: security/reports/pip-audit.json
@@ -117,7 +117,7 @@ jobs:
         run: pytest backend/tests/ -v --cov=backend/app --cov-report=xml
 
       - name: Upload coverage
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: coverage-report
           path: coverage.xml
@@ -137,7 +137,7 @@ jobs:
           bandit -r backend/ -f html -o security/reports/bandit-report.html || true
 
       - name: Upload SAST Report
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: sast-report
           path: |
