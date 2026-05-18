@@ -28,15 +28,15 @@ db-reset:
 	docker compose exec api alembic upgrade head
 
 test:
-	docker compose exec api pytest backend/tests/ -v --cov=backend/app --cov-report=term-missing
+	docker compose exec api pytest tests/ -v --cov=app --cov-report=term-missing
 
 test-v:
-	docker compose exec api pytest backend/tests/ -v
+	docker compose exec api pytest tests/ -v
 
 lint:
-	docker compose exec api flake8 backend/ --max-line-length=120
+	docker compose exec api flake8 app/ --max-line-length=120
 
 bandit:
-	docker compose exec api bandit -r backend/ -f html -o security/reports/bandit-report.html || true
-	docker compose exec api bandit -r backend/ -f json -o security/reports/bandit-report.json || true
-	docker compose exec api bandit -r backend/ -ll -ii
+	docker compose exec api bandit -r app/ -f html -o /app/security/reports/bandit-report.html || true
+	docker compose exec api bandit -r app/ -f json -o /app/security/reports/bandit-report.json || true
+	docker compose exec api bandit -r app/ -ll -ii
