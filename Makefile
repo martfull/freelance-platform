@@ -1,4 +1,4 @@
-.PHONY: build up down logs migrate migration downgrade db-reset test test-v lint bandit
+.PHONY: build up down logs nginx-logs migrate migration downgrade db-reset test test-v lint bandit
 
 build:
 	docker compose up --build -d
@@ -11,6 +11,9 @@ down:
 
 logs:
 	docker compose logs -f api
+
+nginx-logs:
+	docker compose logs -f nginx
 
 migrate:
 	docker compose exec api alembic upgrade head
