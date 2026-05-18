@@ -51,6 +51,8 @@ jobs:
 
   trivy:
     runs-on: ubuntu-latest
+    permissions:
+      security-events: write
     steps:
       - uses: actions/checkout@v4
 
