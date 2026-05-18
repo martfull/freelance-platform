@@ -39,3 +39,6 @@ Thumbs.db
 
 # Working materials (not part of the project)
 new_docs/
+
+# Claude Code
+CLAUDE.md
