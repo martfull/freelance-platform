@@ -47,6 +47,7 @@ audit
 - [SECURITY_ARCHITECTURE.md](SECURITY_ARCHITECTURE.md) — криптографія та безпека.
 - [DATABASE_DESIGN.md](DATABASE_DESIGN.md) — проєктування бази даних.
 - [API_SPEC.md](API_SPEC.md) — стартова API-специфікація.
+- [ERROR_HANDLING.md](ERROR_HANDLING.md) — формат API-помилок, exception-и та правила вибору HTTP/status codes.
 - [THREAT_MODEL.md](THREAT_MODEL.md) — модель загроз і ризики.
 - [DEVELOPMENT_PLAN.md](DEVELOPMENT_PLAN.md) — план реалізації.
 - [GLOSSARY.md](GLOSSARY.md) — терміни проєкту.
