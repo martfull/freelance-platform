@@ -28,11 +28,17 @@ jobs:
       - name: Run Bandit — HTML
         run: bandit -r backend/ -f html -o security/reports/bandit-report.html || true
 
+      - name: Run Bandit — SARIF
+        run: bandit -r backend/ -f sarif -o security/reports/bandit.sarif || true
+
+      - name: Upload SARIF to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@v3
+        if: always()
+        with:
+          sarif_file: security/reports/bandit.sarif
+
       - name: Run Bandit — fail on HIGH severity
         run: bandit -r backend/ -ll -ii
-        # -ll  → мінімальний severity рівень: HIGH
-        # -ii  → мінімальний confidence: HIGH
-        # повертає exit code != 0 тільки якщо є HIGH+HIGH знахідки
 
       - name: Upload SAST Artifacts
         if: always()
