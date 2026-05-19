@@ -66,8 +66,8 @@ frontend/
 - [x] `middleware.ts` — захист роутів через cookie
 
 ### Фаза 3: UI компоненти
-- [ ] `components/ui/Button.tsx` — варіанти: primary, secondary, loading стан
-- [ ] `components/ui/Input.tsx` — label, error message, disabled стан
+- [x] `components/ui/Button.tsx` — варіанти: primary, secondary, ghost; loading стан
+- [x] `components/ui/Input.tsx` — label, error message, disabled стан
 
 ### Фаза 4: Сторінки Login / Register
 - [ ] `RegisterForm.tsx` — email + password + confirm, Zod валідація
