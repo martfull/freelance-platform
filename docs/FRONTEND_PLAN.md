@@ -70,11 +70,12 @@ frontend/
 - [x] `components/ui/Input.tsx` — label, error message, disabled стан
 
 ### Фаза 4: Сторінки Login / Register
-- [ ] `RegisterForm.tsx` — email + password + confirm, Zod валідація
-- [ ] `LoginForm.tsx` — email + password, Zod валідація
-- [ ] `/register/page.tsx` — сторінка з формою
-- [ ] `/login/page.tsx` — сторінка з формою
-- [ ] `/dashboard/page.tsx` — заглушка з user info та logout
+- [x] `RegisterForm.tsx` — email + password + confirm, Zod валідація, auto-login після реєстрації
+- [x] `LoginForm.tsx` — email + password, Zod валідація, server error handling
+- [x] `/register/page.tsx` — сторінка з формою
+- [x] `/login/page.tsx` — сторінка з формою
+- [x] `/dashboard/page.tsx` — user info (email, role, id) та logout
+- [x] `/page.tsx` — redirect → /login
 
 ### Фаза 5: Docker інтеграція
 - [ ] Dockerfile для production (multi-stage)
