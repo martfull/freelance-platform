@@ -18,3 +18,27 @@ class EntityStatus(StrEnum):
     ACTIVE = "active"
     INACTIVE = "inactive"
     DELETED = "deleted"
+
+
+class TaskStatus(StrEnum):
+    OPEN = "open"
+    IN_NEGOTIATION = "in_negotiation"
+    CONTRACTED = "contracted"
+    CANCELLED = "cancelled"
+    CLOSED = "closed"
+
+
+class OfferStatus(StrEnum):
+    PENDING = "pending"
+    ACCEPTED = "accepted"
+    REJECTED = "rejected"
+    WITHDRAWN = "withdrawn"
+
+
+class ContractStatus(StrEnum):
+    PENDING_CONFIRMATION = "pending_confirmation"
+    ACTIVE = "active"
+    SUBMITTED = "submitted"
+    COMPLETED = "completed"
+    DISPUTED = "disputed"
+    CANCELLED = "cancelled"
