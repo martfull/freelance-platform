@@ -1,34 +1,119 @@
 # RBAC Matrix
 
+## Архітектура
+
+RBAC у проєкті двошаровий:
+
+1. **System Role** — записана в `users.system_role`, перевіряється через `require_role()` dep в `permissions.py`
+2. **Contextual Role** — визначається участю в конкретному контракті (`client` або `freelancer`), буде перевірятись на рівні service/repository
+
+---
+
 ## System Roles
 
-| system_role | Register | Login | Manage Users | Resolve Disputes | View Audit Logs |
-|---|:---:|:---:|:---:|:---:|:---:|
-| user | — | ✓ | — | — | — |
-| moderator | — | ✓ | — | ✓ | ✓ |
-| admin | — | ✓ | ✓ | — | ✓ |
+Три системні ролі визначені в `SystemRole(StrEnum)` (`common/enums.py`):
 
-## Contextual Roles (defined by order participation)
+| Role | Опис |
+|---|---|
+| `user` | Звичайний зареєстрований користувач (дефолт) |
+| `moderator` | Може розглядати диспути і читати audit log |
+| `admin` | Повний доступ до адміністрування |
 
-| Action | client | freelancer | moderator | admin |
+### Accounts (реалізовано)
+
+| Endpoint | Публічний | user | moderator | admin |
 |---|:---:|:---:|:---:|:---:|
-| Create task | ✓ | ✓ | — | — |
-| Edit task (before order) | ✓ (own) | — | — | — |
-| Create offer | — | ✓ | — | — |
-| Accept offer | ✓ (own task) | — | — | — |
-| Confirm order | ✓ | ✓ | — | — |
-| Read chat | ✓ (own order) | ✓ (own order) | — | — |
-| Send message | ✓ (own order) | ✓ (own order) | — | — |
-| Upload file | — | ✓ (own order) | — | — |
-| Download file | ✓ (own order) | ✓ (own order) | — | — |
-| Submit work | — | ✓ (own order) | — | — |
-| Complete order | ✓ (own order) | — | — | — |
-| Open dispute | ✓ (own order) | ✓ (own order) | — | — |
-| Resolve dispute | — | — | ✓ | — |
-| Deposit escrow | ✓ | ✓ | — | — |
+| `POST /accounts/register` | ✓ | — | — | — |
+| `POST /accounts/login` | ✓ | — | — | — |
+| `POST /accounts/refresh` | ✓ | — | — | — |
+| `POST /accounts/logout` | ✓ | — | — | — |
+| `GET /accounts/me` | — | ✓ | ✓ | ✓ |
 
-## Key Rule
+### Marketplace (заплановано)
 
-`client` and `freelancer` are NOT separate account types.
-They are contextual roles determined by the user's participation in a specific task/order.
-One `user` can be `client` in one order and `freelancer` in another simultaneously.
+| Endpoint | user | moderator | admin |
+|---|:---:|:---:|:---:|
+| `GET /marketplace/tasks` | ✓ | ✓ | ✓ |
+| `POST /marketplace/tasks` | ✓ | — | — |
+| `PATCH /marketplace/tasks/{id}` | own | — | ✓ |
+| `DELETE /marketplace/tasks/{id}` | own | — | ✓ |
+| `POST /marketplace/tasks/{id}/offers` | ✓ | — | — |
+| `POST /marketplace/offers/{id}/accept` | own task | — | ✓ |
+
+### Contracts (заплановано)
+
+| Endpoint | client | freelancer | moderator | admin |
+|---|:---:|:---:|:---:|:---:|
+| `GET /contracts/{id}` | ✓ | ✓ | ✓ | ✓ |
+| `POST /contracts/{id}/confirm` | ✓ | ✓ | — | — |
+| `POST /contracts/{id}/complete` | ✓ | — | — | ✓ |
+| `POST /contracts/{id}/cancel` | ✓ | ✓ | — | ✓ |
+
+### Communication (заплановано)
+
+| Endpoint | client | freelancer | moderator | admin |
+|---|:---:|:---:|:---:|:---:|
+| `GET /communication/{contract_id}/messages` | ✓ | ✓ | ✓ | ✓ |
+| `POST /communication/{contract_id}/messages` | ✓ | ✓ | — | — |
+
+### Delivery (заплановано)
+
+| Endpoint | client | freelancer | moderator | admin |
+|---|:---:|:---:|:---:|:---:|
+| `POST /delivery/{contract_id}/upload` | — | ✓ | — | — |
+| `GET /delivery/{contract_id}/files` | ✓ | ✓ | — | — |
+| `GET /delivery/{contract_id}/files/{id}` | ✓ | ✓ | — | — |
+| `POST /delivery/{contract_id}/submit` | — | ✓ | — | — |
+
+### Payments (заплановано)
+
+| Endpoint | client | freelancer | moderator | admin |
+|---|:---:|:---:|:---:|:---:|
+| `POST /payments/{contract_id}/deposit` | ✓ | — | — | — |
+| `POST /payments/{contract_id}/release` | — | — | ✓ | ✓ |
+| `GET /payments/{contract_id}/ledger` | ✓ | ✓ | ✓ | ✓ |
+
+### Moderation (заплановано)
+
+| Endpoint | user | moderator | admin |
+|---|:---:|:---:|:---:|
+| `POST /moderation/disputes` | own contract | — | — |
+| `GET /moderation/disputes` | own | ✓ | ✓ |
+| `POST /moderation/disputes/{id}/resolve` | — | ✓ | ✓ |
+
+### Audit (заплановано)
+
+| Endpoint | user | moderator | admin |
+|---|:---:|:---:|:---:|
+| `GET /audit/logs` | — | ✓ | ✓ |
+| `GET /audit/logs/{id}/verify` | — | ✓ | ✓ |
+
+---
+
+## Contextual Roles
+
+`client` і `freelancer` — **не окремі типи акаунтів**. Це ролі всередині конкретного контракту:
+
+- `client` — користувач, який створив task і прийняв offer
+- `freelancer` — користувач, чий offer був прийнятий
+
+Один `user` може одночасно бути `client` в одному контракті і `freelancer` в іншому.
+
+---
+
+## Реалізація
+
+```python
+# permissions.py
+def require_role(*roles: SystemRole):
+    def dependency(current_user: User = Depends(get_current_user)) -> User:
+        if current_user.system_role not in roles:
+            raise PermissionDeniedError("Insufficient permissions")
+        return current_user
+    return dependency
+
+require_moderator = require_role(SystemRole.MODERATOR, SystemRole.ADMIN)
+require_admin = require_role(SystemRole.ADMIN)
+```
+
+Контекстуальна перевірка (client/freelancer) реалізується на рівні service при виконанні дій на конкретному контракті.
