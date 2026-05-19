@@ -59,10 +59,11 @@ frontend/
 - [ ] Налаштувати Nginx проксі: `/api/*` → FastAPI, `/*` → Next.js
 
 ### Фаза 2: Auth інфраструктура
-- [ ] `lib/tokens.ts` — зберігання токенів (access в memory, refresh в localStorage)
-- [ ] `lib/api.ts` — axios instance з Bearer interceptor та auto-refresh при 401
-- [ ] `store/auth.ts` — Zustand store з user, isAuth, login(), logout(), fetchMe()
-- [ ] `middleware.ts` — захист роутів
+- [x] `lib/tokens.ts` — зберігання токенів (access в memory, refresh в localStorage + cookie)
+- [x] `lib/api.ts` — axios instance з Bearer interceptor та auto-refresh при 401
+- [x] `store/auth.ts` — Zustand store з user, isAuth, login(), logout(), fetchMe()
+- [x] `components/auth/AuthProvider.tsx` — викликає fetchMe() при mount
+- [x] `middleware.ts` — захист роутів через cookie
 
 ### Фаза 3: UI компоненти
 - [ ] `components/ui/Button.tsx` — варіанти: primary, secondary, loading стан
