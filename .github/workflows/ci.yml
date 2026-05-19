@@ -185,4 +185,5 @@ jobs:
             cd ~/freelance-platform
             git pull origin main
             docker compose up --build -d
+            docker compose exec -T api alembic current 2>/dev/null | grep -q '[a-f0-9]' || docker compose exec -T api alembic stamp head
             docker compose exec -T api alembic upgrade head
