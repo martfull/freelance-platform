@@ -135,8 +135,9 @@ storage/              — encrypted file chunks (не комітяться)
 ```
 lint ──┐
 sca  ──┼──→ test → sast ──┐
-trivy ─┘                  ├──→ deploy → сервер 83.10.125.96
-               trivy ─────┘
+trivy ─┤                  ├──→ deploy → сервер 83.10.125.96
+       │         trivy ───┘
+frontend ─────────────────┘
 ```
 
 | Job | Що робить |
@@ -146,6 +147,7 @@ trivy ─┘                  ├──→ deploy → сервер 83.10.125.96
 | `trivy` | сканування файлів на вразливості |
 | `test` | pytest + live PostgreSQL, coverage ≥ 40% |
 | `sast` | Bandit — MEDIUM severity + MEDIUM confidence |
+| `frontend` | tsc --noEmit · ESLint · next build |
 | `deploy` | SSH → git pull → docker compose up → alembic upgrade |
 
 **Деплой** відбувається автоматично при push в `main` після проходження всіх перевірок.
