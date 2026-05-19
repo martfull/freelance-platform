@@ -10,3 +10,17 @@ services:
     volumes:
       - ./backend:/app
       - ./storage:/app/storage
+
+  frontend:
+    build:
+      context: ./frontend
+      target: deps
+    command: npm run dev
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+      - /app/.next
+    environment:
+      NEXT_PUBLIC_API_URL: http://localhost/api

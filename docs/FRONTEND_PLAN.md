@@ -78,9 +78,12 @@ frontend/
 - [x] `/page.tsx` — redirect → /login
 
 ### Фаза 5: Docker інтеграція
-- [ ] Dockerfile для production (multi-stage)
-- [ ] docker-compose.yml — додати frontend сервіс
-- [ ] Nginx конфіг — проксі на frontend і API
+- [x] Dockerfile — multi-stage (deps → builder → production), standalone output
+- [x] docker-compose.yml — frontend сервіс з healthcheck
+- [x] docker-compose.override.yml — dev режим з hot reload
+- [x] Nginx: `/api/*` → FastAPI, `/` → Next.js, `/health` → api
+- [x] next.config.mjs — `output: standalone`
+- [x] `.env.local.example`
 
 ---
 

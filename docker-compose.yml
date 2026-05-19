@@ -39,6 +39,25 @@ services:
       db:
         condition: service_healthy
 
+  frontend:
+    build:
+      context: ./frontend
+      target: production
+    restart: unless-stopped
+    expose:
+      - "3000"
+    environment:
+      NEXT_PUBLIC_API_URL: /api
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:3000/ || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
+    depends_on:
+      api:
+        condition: service_healthy
+
   nginx:
     image: nginx:1.27-alpine
     restart: unless-stopped
@@ -50,8 +69,10 @@ services:
     depends_on:
       api:
         condition: service_healthy
+      frontend:
+        condition: service_healthy
     healthcheck:
-      test: ["CMD-SHELL", "curl -sf http://127.0.0.1/health || exit 1"]
+      test: ["CMD-SHELL", "curl -sf http://127.0.0.1/ || exit 1"]
       interval: 10s
       timeout: 5s
       retries: 3
