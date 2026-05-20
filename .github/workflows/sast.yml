@@ -23,16 +23,16 @@ jobs:
         run: pip install bandit
 
       - name: Run Bandit — JSON
-        run: bandit -r backend/ -f json -o security/reports/bandit-report.json || true
+        run: bandit -r backend/ -f json -o security/reports/bandit-report.json -c backend/.bandit || true
 
       - name: Run Bandit — HTML
-        run: bandit -r backend/ -f html -o security/reports/bandit-report.html || true
+        run: bandit -r backend/ -f html -o security/reports/bandit-report.html -c backend/.bandit || true
 
       - name: Run Bandit — fail on MEDIUM severity
-        run: bandit -r backend/ -ll -ii --exclude backend/tests
+        run: bandit -r backend/ -ll -ii -c backend/.bandit
         # -ll  → мінімальний severity рівень: MEDIUM
         # -ii  → мінімальний confidence: MEDIUM
-        # --exclude backend/tests → B101/B105 у тестах є false positives
+        # -c backend/.bandit → exclude_dirs = tests
 
       - name: Upload SAST Artifacts
         if: always()

@@ -133,8 +133,8 @@ jobs:
 
       - name: Run Bandit SAST
         run: |
-          bandit -r backend/ -f json -o security/reports/bandit-report.json || true
-          bandit -r backend/ -f html -o security/reports/bandit-report.html || true
+          bandit -r backend/ -f json -o security/reports/bandit-report.json -c backend/.bandit || true
+          bandit -r backend/ -f html -o security/reports/bandit-report.html -c backend/.bandit || true
 
       - name: Upload SAST Report
         uses: actions/upload-artifact@v4
