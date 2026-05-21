@@ -5,7 +5,7 @@
 RBAC у проєкті двошаровий:
 
 1. **System Role** — записана в `users.system_role`, перевіряється через `require_role()` dep в `permissions.py`
-2. **Contextual Role** — визначається участю в конкретному контракті (`client` або `freelancer`), буде перевірятись на рівні service/repository
+2. **Contextual Role** — визначається участю в конкретному контракті (`client` або `freelancer`), перевіряється на рівні service
 
 ---
 
@@ -19,6 +19,8 @@ RBAC у проєкті двошаровий:
 | `moderator` | Може розглядати диспути і читати audit log |
 | `admin` | Повний доступ до адміністрування |
 
+---
+
 ### Accounts (реалізовано)
 
 | Endpoint | Публічний | user | moderator | admin |
@@ -28,26 +30,32 @@ RBAC у проєкті двошаровий:
 | `POST /accounts/refresh` | ✓ | — | — | — |
 | `POST /accounts/logout` | ✓ | — | — | — |
 | `GET /accounts/me` | — | ✓ | ✓ | ✓ |
+| `POST /accounts/keys` | — | ✓ | ✓ | ✓ |
+| `GET /accounts/me/keys` | — | ✓ | ✓ | ✓ |
+| `GET /accounts/users/{id}/keys/public` | — | ✓ | ✓ | ✓ |
 
-### Marketplace (заплановано)
+### Marketplace (реалізовано)
 
-| Endpoint | user | moderator | admin |
-|---|:---:|:---:|:---:|
-| `GET /marketplace/tasks` | ✓ | ✓ | ✓ |
-| `POST /marketplace/tasks` | ✓ | — | — |
-| `PATCH /marketplace/tasks/{id}` | own | — | ✓ |
-| `DELETE /marketplace/tasks/{id}` | own | — | ✓ |
-| `POST /marketplace/tasks/{id}/offers` | ✓ | — | — |
-| `POST /marketplace/offers/{id}/accept` | own task | — | ✓ |
+| Endpoint | Публічний | user | moderator | admin |
+|---|:---:|:---:|:---:|:---:|
+| `GET /marketplace/tasks` | ✓ | — | — | — |
+| `GET /marketplace/tasks/{id}` | ✓ | — | — | — |
+| `POST /marketplace/tasks` | — | ✓ | — | — |
+| `PATCH /marketplace/tasks/{id}` | — | own | — | ✓ |
+| `DELETE /marketplace/tasks/{id}` | — | own | — | ✓ |
+| `GET /marketplace/tasks/{id}/offers` | — | own task | — | — |
+| `POST /marketplace/tasks/{id}/offers` | — | ✓ | — | — |
+| `POST /marketplace/offers/{id}/accept` | — | own task | — | — |
+| `POST /marketplace/offers/{id}/withdraw` | — | own offer | — | — |
 
-### Contracts (заплановано)
+### Contracts (реалізовано)
 
 | Endpoint | client | freelancer | moderator | admin |
 |---|:---:|:---:|:---:|:---:|
-| `GET /contracts/{id}` | ✓ | ✓ | ✓ | ✓ |
+| `GET /contracts/my` | ✓ | ✓ | — | — |
+| `GET /contracts/{id}` | ✓ | ✓ | — | — |
 | `POST /contracts/{id}/confirm` | ✓ | ✓ | — | — |
-| `POST /contracts/{id}/complete` | ✓ | — | — | ✓ |
-| `POST /contracts/{id}/cancel` | ✓ | ✓ | — | ✓ |
+| `POST /contracts/{id}/cancel` | ✓ | ✓ | — | — |
 
 ### Communication (заплановано)
 
