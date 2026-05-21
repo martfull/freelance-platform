@@ -1,8 +1,8 @@
 from datetime import datetime
 
-from pydantic import BaseModel, EmailStr, field_validator
+from pydantic import BaseModel, EmailStr, Field, field_validator
 
-from app.common.enums import SystemRole
+from app.common.enums import KeyStatus, KeyType, SystemRole
 
 
 class RegisterRequest(BaseModel):
@@ -40,3 +40,35 @@ class UserResponse(BaseModel):
     created_at: datetime
 
     model_config = {"from_attributes": True}
+
+
+class RegisterUserKeyRequest(BaseModel):
+    key_type: KeyType
+    public_key_pem: str = Field(min_length=64)
+
+    @field_validator("public_key_pem")
+    @classmethod
+    def public_key_must_be_pem(cls, value: str) -> str:
+        normalized = value.strip()
+        if not normalized.startswith("-----BEGIN PUBLIC KEY-----"):
+            raise ValueError("Public key must be PEM encoded")
+        if not normalized.endswith("-----END PUBLIC KEY-----"):
+            raise ValueError("Public key must be PEM encoded")
+        return normalized
+
+
+class UserKeyResponse(BaseModel):
+    id: int
+    user_id: int
+    key_type: KeyType
+    public_key_pem: str
+    status: KeyStatus
+    created_at: datetime
+    rotated_at: datetime | None
+
+    model_config = {"from_attributes": True}
+
+
+class PublicUserKeysResponse(BaseModel):
+    user_id: int
+    keys: list[UserKeyResponse]

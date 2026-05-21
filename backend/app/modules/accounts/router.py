@@ -7,9 +7,12 @@ from app.modules.accounts.dependencies import get_current_user
 from app.modules.accounts.models import User
 from app.modules.accounts.schemas import (
     LoginRequest,
+    PublicUserKeysResponse,
     RefreshRequest,
     RegisterRequest,
+    RegisterUserKeyRequest,
     TokenResponse,
+    UserKeyResponse,
     UserResponse,
 )
 
@@ -39,3 +42,29 @@ def logout(body: RefreshRequest, db: Session = Depends(get_db)):
 @router.get("/me", response_model=UserResponse)
 def me(current_user: User = Depends(get_current_user)):
     return current_user
+
+
+@router.post("/keys", response_model=UserKeyResponse, status_code=201)
+def register_key(
+    body: RegisterUserKeyRequest,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    return service.register_user_key(db, current_user, body.key_type, body.public_key_pem)
+
+
+@router.get("/me/keys", response_model=list[UserKeyResponse])
+def list_my_keys(
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    return service.list_my_keys(db, current_user)
+
+
+@router.get("/users/{user_id}/keys/public", response_model=PublicUserKeysResponse)
+def get_public_keys(
+    user_id: int,
+    _: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    return service.get_public_keys(db, user_id)
