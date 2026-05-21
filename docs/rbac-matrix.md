@@ -21,7 +21,7 @@ RBAC у проєкті двошаровий:
 
 ---
 
-### Accounts (реалізовано)
+### Accounts 
 
 | Endpoint | Публічний | user | moderator | admin |
 |---|:---:|:---:|:---:|:---:|
@@ -34,7 +34,7 @@ RBAC у проєкті двошаровий:
 | `GET /accounts/me/keys` | — | ✓ | ✓ | ✓ |
 | `GET /accounts/users/{id}/keys/public` | — | ✓ | ✓ | ✓ |
 
-### Marketplace (реалізовано)
+### Marketplace 
 
 | Endpoint | Публічний | user | moderator | admin |
 |---|:---:|:---:|:---:|:---:|
@@ -48,7 +48,7 @@ RBAC у проєкті двошаровий:
 | `POST /marketplace/offers/{id}/accept` | — | own task | — | — |
 | `POST /marketplace/offers/{id}/withdraw` | — | own offer | — | — |
 
-### Contracts (реалізовано)
+### Contracts 
 
 | Endpoint | client | freelancer | moderator | admin |
 |---|:---:|:---:|:---:|:---:|
@@ -57,14 +57,14 @@ RBAC у проєкті двошаровий:
 | `POST /contracts/{id}/confirm` | ✓ | ✓ | — | — |
 | `POST /contracts/{id}/cancel` | ✓ | ✓ | — | — |
 
-### Communication (заплановано)
+### Communication 
 
 | Endpoint | client | freelancer | moderator | admin |
 |---|:---:|:---:|:---:|:---:|
 | `GET /communication/{contract_id}/messages` | ✓ | ✓ | ✓ | ✓ |
 | `POST /communication/{contract_id}/messages` | ✓ | ✓ | — | — |
 
-### Delivery (заплановано)
+### Delivery 
 
 | Endpoint | client | freelancer | moderator | admin |
 |---|:---:|:---:|:---:|:---:|
@@ -73,7 +73,7 @@ RBAC у проєкті двошаровий:
 | `GET /delivery/{contract_id}/files/{id}` | ✓ | ✓ | — | — |
 | `POST /delivery/{contract_id}/submit` | — | ✓ | — | — |
 
-### Payments (заплановано)
+### Payments 
 
 | Endpoint | client | freelancer | moderator | admin |
 |---|:---:|:---:|:---:|:---:|
@@ -81,7 +81,7 @@ RBAC у проєкті двошаровий:
 | `POST /payments/{contract_id}/release` | — | — | ✓ | ✓ |
 | `GET /payments/{contract_id}/ledger` | ✓ | ✓ | ✓ | ✓ |
 
-### Moderation (заплановано)
+### Moderation 
 
 | Endpoint | user | moderator | admin |
 |---|:---:|:---:|:---:|
@@ -89,7 +89,7 @@ RBAC у проєкті двошаровий:
 | `GET /moderation/disputes` | own | ✓ | ✓ |
 | `POST /moderation/disputes/{id}/resolve` | — | ✓ | ✓ |
 
-### Audit (заплановано)
+### Audit 
 
 | Endpoint | user | moderator | admin |
 |---|:---:|:---:|:---:|
