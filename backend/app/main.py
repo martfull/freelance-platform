@@ -19,6 +19,7 @@ app = FastAPI(
     title=settings.app_name,
     description="AES-GCM + RSA-OAEP encrypted freelance platform",
     version=settings.app_version,
+    root_path="/api",
 )
 
 configure_middleware(app)
