@@ -42,3 +42,43 @@ class ContractStatus(StrEnum):
     COMPLETED = "completed"
     DISPUTED = "disputed"
     CANCELLED = "cancelled"
+
+
+class KeyType(StrEnum):
+    RSA_ENCRYPTION = "rsa_encryption"
+    RSA_SIGNING = "rsa_signing"
+
+
+class KeyStatus(StrEnum):
+    ACTIVE = "active"
+    ROTATED = "rotated"
+    REVOKED = "revoked"
+
+
+class FileStatus(StrEnum):
+    INITIALIZED = "initialized"
+    UPLOADING = "uploading"
+    COMPLETED = "completed"
+    FAILED = "failed"
+    REJECTED = "rejected"
+
+
+class EscrowTransactionType(StrEnum):
+    DEPOSIT = "deposit"
+    HOLD = "hold"
+    RELEASE = "release"
+    REFUND = "refund"
+    ADJUSTMENT = "adjustment"
+
+
+class EscrowTransactionStatus(StrEnum):
+    PENDING = "pending"
+    COMPLETED = "completed"
+    FAILED = "failed"
+
+
+class DisputeStatus(StrEnum):
+    OPEN = "open"
+    UNDER_REVIEW = "under_review"
+    RESOLVED = "resolved"
+    REJECTED = "rejected"

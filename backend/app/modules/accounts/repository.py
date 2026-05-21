@@ -3,7 +3,8 @@ from datetime import datetime
 
 from sqlalchemy.orm import Session
 
-from app.modules.accounts.models import RefreshToken, User
+from app.common.enums import KeyStatus, KeyType
+from app.modules.accounts.models import RefreshToken, User, UserKey
 
 
 def get_user_by_email(db: Session, email: str) -> User | None:
@@ -38,3 +39,25 @@ def revoke_refresh_token(db: Session, raw_token: str) -> None:
     token = get_refresh_token(db, raw_token)
     if token:
         token.revoked = True
+
+
+def get_active_user_key(db: Session, user_id: int, key_type: KeyType) -> UserKey | None:
+    return db.query(UserKey).filter(
+        UserKey.user_id == user_id,
+        UserKey.key_type == key_type,
+        UserKey.status == KeyStatus.ACTIVE,
+    ).first()
+
+
+def list_user_keys(db: Session, user_id: int, active_only: bool = False) -> list[UserKey]:
+    query = db.query(UserKey).filter(UserKey.user_id == user_id)
+    if active_only:
+        query = query.filter(UserKey.status == KeyStatus.ACTIVE)
+    return query.order_by(UserKey.created_at.desc()).all()
+
+
+def create_user_key(db: Session, user_id: int, key_type: KeyType, public_key_pem: str) -> UserKey:
+    key = UserKey(user_id=user_id, key_type=key_type, public_key_pem=public_key_pem)
+    db.add(key)
+    db.flush()
+    return key
